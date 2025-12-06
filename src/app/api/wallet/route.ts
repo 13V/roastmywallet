@@ -11,11 +11,6 @@ export async function GET(request: Request) {
 
     try {
         const data = await getWalletData(address);
-
-        if (data.error) {
-            return NextResponse.json(data, { status: 400 });
-        }
-
         return NextResponse.json(data);
     } catch (error) {
         console.error('API Error:', error);
