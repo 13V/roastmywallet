@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-const DATA_DIR = path.join(process.cwd(), 'src', 'data');
+import os from 'os';
+
+// Use /tmp for ephemeral storage in Vercel lambda (persists only while lambda is warm)
+// NOTE: For permanent storage, this should be migrated to Vercel KV or Postgres.
+const DATA_DIR = path.join(os.tmpdir(), 'roast-data');
 const FILE_PATH = path.join(DATA_DIR, 'leaderboard.json');
 
 // Helper to get current hour ID (timestamp / 1 hr)
