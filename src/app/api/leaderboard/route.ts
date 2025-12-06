@@ -8,7 +8,17 @@ const FILE_PATH = path.join(DATA_DIR, 'leaderboard.json');
 // Helper to get current hour ID (timestamp / 1 hr)
 const getHourId = () => Math.floor(Date.now() / (1000 * 60 * 60));
 
-function getLeaderboard() {
+interface LeaderboardEntry {
+    wallet: string;
+    winRate: number;
+    paperHandScore: number;
+    rugPulls: number;
+    roast: string;
+    diagnosis?: string;
+    timestamp: number;
+}
+
+function getLeaderboard(): { hourId: number; data: LeaderboardEntry[]; globalCount: number } {
     try {
         if (!fs.existsSync(DATA_DIR)) {
             fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -23,7 +33,7 @@ function getLeaderboard() {
         const currentHour = getHourId();
 
         // Default structure
-        let result = {
+        let result: { hourId: number; data: LeaderboardEntry[]; globalCount: number } = {
             hourId: currentHour,
             data: [],
             globalCount: fileData?.globalCount || 0
@@ -37,7 +47,7 @@ function getLeaderboard() {
             result.globalCount = fileData.globalCount || 0;
             // Check if hour matches, if so keep data, else reset data (but keep globalCount)
             if (fileData.hourId === currentHour) {
-                result.data = fileData.data || [];
+                result.data = (fileData.data || []) as LeaderboardEntry[];
             }
         }
 
