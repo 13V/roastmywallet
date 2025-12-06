@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 
 // Helper to get current hour ID (timestamp / 1 hr)
 const getHourId = () => Math.floor(Date.now() / (1000 * 60 * 60));
@@ -24,13 +24,32 @@ interface LeaderboardData {
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+// Initialize Redis client lazily to avoid connection issues during build if env is missing
+let redisClient: Redis | null = null;
+
+function getRedis() {
+    if (!redisClient && process.env.REDIS_URL) {
+        redisClient = new Redis(process.env.REDIS_URL);
+    }
+    return redisClient;
+}
+
 async function getLeaderboard(): Promise<LeaderboardData> {
     try {
         const currentHour = getHourId();
+        const redis = getRedis();
 
-        // Fetch from Vercel KV
-        const storedData: LeaderboardData | null = await kv.get('roast:leaderboard');
-        console.log('KV Fetch Result:', storedData ? 'Data Found' : 'NULL (First Run?)');
+        // Fallback if no Redis connection (e.g. build time or missing env)
+        if (!redis) {
+            console.warn('Redis client not initialized (Missing REDIS_URL)');
+            return { hourId: currentHour, data: [], globalCount: 0 };
+        }
+
+        // Fetch from Redis
+        const rawData = await redis.get('roast:leaderboard');
+        const storedData: LeaderboardData | null = rawData ? JSON.parse(rawData) : null;
+
+        console.log('Redis Fetch Result:', storedData ? 'Data Found' : 'NULL (First Run?)');
 
         // Default structure
         let result: LeaderboardData = {
@@ -47,27 +66,30 @@ async function getLeaderboard(): Promise<LeaderboardData> {
                 result.data = storedData.data || [];
             }
         } else {
-            console.log('No KV data found. Starting fresh.');
+            console.log('No Redis data found. Starting fresh.');
         }
 
         return result;
     } catch (error) {
-        console.error('Error reading KV leaderboard:', error);
+        console.error('Error reading Redis leaderboard:', error);
         return { hourId: getHourId(), data: [], globalCount: 0 };
     }
 }
 
 async function saveLeaderboard(data: LeaderboardEntry[], count: number) {
     try {
+        const redis = getRedis();
+        if (!redis) return;
+
         const payload: LeaderboardData = {
             hourId: getHourId(),
             data: data,
             globalCount: count
         };
-        // Save to Vercel KV
-        await kv.set('roast:leaderboard', payload);
+        // Save to Redis
+        await redis.set('roast:leaderboard', JSON.stringify(payload));
     } catch (error) {
-        console.error('Error saving KV leaderboard:', error);
+        console.error('Error saving Redis leaderboard:', error);
     }
 }
 
