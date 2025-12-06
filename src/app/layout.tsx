@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   description: "Get brutally roasted for your terrible trading decisions. Paste your Solana wallet and prepare to be humiliated.",
 };
 
+import { Analytics } from "@vercel/analytics/react";
+
+// ... existing code ...
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
