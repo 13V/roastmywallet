@@ -30,6 +30,7 @@ async function getLeaderboard(): Promise<LeaderboardData> {
 
         // Fetch from Vercel KV
         const storedData: LeaderboardData | null = await kv.get('roast:leaderboard');
+        console.log('KV Fetch Result:', storedData ? 'Data Found' : 'NULL (First Run?)');
 
         // Default structure
         let result: LeaderboardData = {
@@ -41,10 +42,12 @@ async function getLeaderboard(): Promise<LeaderboardData> {
         if (storedData) {
             result.globalCount = storedData.globalCount || 0;
 
-            // Check if hour matches. if not, data array stays empty (reset)
+            // Check if hour matches. if not, data array stays empty (reset) but globalCount persists
             if (storedData.hourId === currentHour) {
                 result.data = storedData.data || [];
             }
+        } else {
+            console.log('No KV data found. Starting fresh.');
         }
 
         return result;
