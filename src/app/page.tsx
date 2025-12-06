@@ -371,14 +371,14 @@ export default function Home() {
           >
             <div className="px-6 py-2 rounded-full border border-orange-500/50 bg-black/40 text-orange-200 font-mono text-sm tracking-wider shadow-[0_0_20px_rgba(249,115,22,0.4)] animate-pulse backdrop-blur-md flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_#f97316]"></span>
-              CA: EHwSmUnqNuw1KekEp5vrHXbfDe1YphAcbyY9jd3Hpump
+              CA: Coming Soon
               <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_#f97316]"></span>
             </div>
 
             {/* Action Buttons */}
             <div className="flex items-center gap-4">
               <a
-                href="https://pump.fun/coin/EHwSmUnqNuw1KekEp5vrHXbfDe1YphAcbyY9jd3Hpump"
+                href="https://pump.fun"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-full font-bold transition-all shadow-[0_0_15px_rgba(234,88,12,0.5)] hover:shadow-[0_0_25px_rgba(234,88,12,0.8)] border border-orange-400/30 hover:scale-105 active:scale-95"
