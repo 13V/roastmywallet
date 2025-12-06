@@ -75,6 +75,10 @@ function saveLeaderboard(data: any[], count: number) {
     }
 }
 
+// Force dynamic on Vercel
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
     const { data, globalCount } = getLeaderboard();
     // Sort by highest rug pulls (descending) and LIMIT TO TOP 10

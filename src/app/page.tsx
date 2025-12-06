@@ -26,7 +26,7 @@ export default function Home() {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch('/api/leaderboard');
+      const res = await fetch('/api/leaderboard', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         // Handle new API response format or fallback
