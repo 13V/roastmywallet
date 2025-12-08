@@ -139,7 +139,7 @@ export default function Home() {
     if (!roastData) return;
 
     // 1. Generate Viral Text - optimized for clicks & engagement
-    const viralText = `My wallet just got EXPOSED by @RoastMyWallet 💀\n\n"${roastData.roast}"\n\n🚨 Diagnosis: ${roastData.diagnosis}\n📉 Paper Hand Score: ${roastData.stats.paperHandScore}/100\n💸 Rugs Collected: ${roastData.stats.rugPulls}\n\nCheck your wallet (at your own risk) 👇\nhttps://roastmywallet.fun $ROAST`;
+    const viralText = `My wallet just got EXPOSED by @roastmywallet_ 💀\n\n"${roastData.roast}"\n\n🚨 Diagnosis: ${roastData.diagnosis}\n📉 Paper Hand Score: ${roastData.stats.paperHandScore}/100\n💸 Rugs Collected: ${roastData.stats.rugPulls}\n\nCheck your wallet (at your own risk) 👇\nhttps://roastmywallet.fun $ROAST`;
 
     // 2. Generate Image
     const element = document.getElementById('meme-card');
